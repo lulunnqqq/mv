@@ -23,6 +23,11 @@ const fs = require('fs');
     downloadPath: downloadPath,
   });
 
+  const scriptData = await fetch(
+    'https://vidsrc.cc/saas/js/embed.min.js?t=1234567890'
+  ).then((res) => res.text());
+  console.log(`Fetched script content, size: ${scriptData.length} bytes`);
+
   // === Step 1: Open webcrack link ===
   console.log('[Step 1] Opening webcrack page...');
   const timestampInSeconds = Date.now() / 1000;
