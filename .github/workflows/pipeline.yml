@@ -1,4 +1,4 @@
-name: Extract Key V1.2
+name: Extract Key V1.3
 
 on:
   workflow_dispatch:
@@ -43,3 +43,20 @@ jobs:
           git add abc.txt
           git diff --cached --quiet || git commit -m "Update abc.txt with latest VRF key"
           git push
+
+  manual-rerun:
+    name: Re-run workflow
+    permissions:
+      actions: write
+    needs: extract
+    if: success() || failure()
+    runs-on: ubuntu-latest
+    steps:
+      - name: Sleep for 5 minutes
+        run: sleep 300
+
+      - name: Re-trigger workflow
+        run: gh workflow run pipeline.yml
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GH_REPO: ${{ github.repository }}
