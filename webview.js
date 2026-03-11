@@ -27,7 +27,7 @@ const fs = require('fs');
   console.log('[Step 1] Opening webcrack page...');
   const timestampInSeconds = Date.now() / 1000;
   const url =
-    `https://webcrack.netlify.app/?url=https://vidsrc.cc/saas/js/embed.min.js?t=${timestampInSeconds}`;
+    `https://webcrack.netlify.app/?url=https%3A%2F%2Fvidsrc.cc%2Fsaas%2Fjs%2Fembed.min.js%3Ft%3D${timestampInSeconds}`;
   await page.goto(url, { waitUntil: 'networkidle2', timeout: 30000 });
   console.log('[Step 1] Page opened successfully.', url);
 
