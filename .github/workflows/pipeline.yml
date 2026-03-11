@@ -1,4 +1,4 @@
-name: Extract VRF Key
+name: Extract Key V1.2
 
 on:
   workflow_dispatch:
@@ -21,15 +21,15 @@ jobs:
       - name: Install dependencies
         run: npm install
 
-      - name: Step 1 - Run webcrack-puppeteer (download & deobfuscate → obfuscated.js)
+      - name: Step 1 - Run webview (download & deobfuscate → obfuscated.js)
         env:
           PROXY_HOST: ${{ secrets.PROXY_HOST }}
           PROXY_USER: ${{ secrets.PROXY_USER }}
           PROXY_PASS: ${{ secrets.PROXY_PASS }}
-        run: node webcrack-puppeteer.js
+        run: node webview.js
 
-      - name: Step 2 - Run extract-vrf-key (extract result → abc.txt)
-        run: node extract-vrf-key.js
+      - name: Step 2 - Run extract (extract result → abc.txt)
+        run: node extract.js
 
       - name: Show result
         run: cat abc.txt
