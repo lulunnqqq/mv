@@ -1,0 +1,37 @@
+name: Extract Key
+
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: '*/5 * * * *' 
+
+jobs:
+  extract:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js 22
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+
+      - name: Install dependencies
+        run: npm install
+
+      - name: Step 1 - Run webview (download & deobfuscate → obfuscated.js)
+        run: node webview.js
+
+      - name: Step 2 - Run extract (extract result → abc.txt)
+        run: node extract.js
+
+      - name: Show result
+        run: cat abc.txt
+
+      - name: Upload abc.txt as artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: vrf-key-result
+          path: abc.txt

@@ -1,0 +1,25 @@
+{
+  "name": "mv",
+  "version": "1.0.0",
+  "description": "",
+  "homepage": "https://github.com/lulunnqqq/mv#readme",
+  "bugs": {
+    "url": "https://github.com/lulunnqqq/mv/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/lulunnqqq/mv.git"
+  },
+  "license": "ISC",
+  "dependencies": {
+    "acorn": "^8.16.0",
+    "puppeteer": "^24.39.0",
+    "webcrack": "^2.15.1"
+  },
+  "author": "",
+  "type": "commonjs",
+  "main": "extract.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  }
+}
