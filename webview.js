@@ -8,13 +8,30 @@ const fs = require('fs');
     fs.mkdirSync(downloadPath);
   }
 
+  // SurfShark proxy config (from GitHub Actions secrets)
+  const proxyHost = process.env.PROXY_HOST;
+  const proxyUser = process.env.PROXY_USER;
+  const proxyPass = process.env.PROXY_PASS;
+
+  const launchArgs = ['--no-sandbox', '--disable-setuid-sandbox'];
+  if (proxyHost) {
+    launchArgs.push(`--proxy-server=https://${proxyHost}`);
+    console.log(`[Proxy] Using proxy`);
+  }
+
   const browser = await puppeteer.launch({
     headless: 'new', // Run headless, no browser window
-    args: ['--no-sandbox', '--disable-setuid-sandbox'],
+    args: launchArgs,
     defaultViewport: { width: 1280, height: 800 },
   });
 
   const page = await browser.newPage();
+
+  // Authenticate with proxy (equivalent to https-proxy-agent auth)
+  if (proxyUser && proxyPass) {
+    await page.authenticate({ username: proxyUser, password: proxyPass });
+    console.log('[Proxy] Authenticated successfully.');
+  }
 
   // Set up CDP session to handle downloads
   const client = await page.createCDPSession();
@@ -23,18 +40,13 @@ const fs = require('fs');
     downloadPath: downloadPath,
   });
 
-  const scriptData = await fetch(
-    'https://vidsrc.cc/saas/js/embed.min.js?t=1234567890'
-  ).then((res) => res.text());
-  console.log(`Fetched script content, size: ${scriptData.length} bytes`);
-
   // === Step 1: Open webcrack link ===
   console.log('[Step 1] Opening webcrack page...');
   const timestampInSeconds = Date.now() / 1000;
   const url =
-    `https://webcrack.netlify.app/?url=https%3A%2F%2Fvidsrc.cc%2Fsaas%2Fjs%2Fembed.min.js%3Ft%3D${timestampInSeconds}`;
+    `https://webcrack.netlify.app/?url=https://vidsrc.cc/saas/js/embed.min.js?t=${timestampInSeconds}`;
   await page.goto(url, { waitUntil: 'networkidle2', timeout: 30000 });
-  console.log('[Step 1] Page opened successfully.', url);
+  console.log('[Step 1] Page opened successfully.');
 
   // === Step 2: Wait 5s for page to finish loading ===
   console.log('[Step 2] Waiting 5 seconds for page to finish loading...');
@@ -62,7 +74,6 @@ const fs = require('fs');
 
   // macOS uses Meta (Cmd+S), Linux uses Control (Ctrl+S)
   const modKey = process.platform === 'darwin' ? 'Meta' : 'Control';
-  console.log(`[Step 5] Using ${modKey}+S for saving...`);
   await page.keyboard.down(modKey);
   await page.keyboard.press('s');
   await page.keyboard.up(modKey);
