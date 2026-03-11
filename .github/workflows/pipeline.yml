@@ -1,4 +1,4 @@
-name: Extract Key V1.2
+name: Extract VRF Key
 
 on:
   workflow_dispatch:
@@ -21,21 +21,23 @@ jobs:
       - name: Install dependencies
         run: npm install
 
-      - name: Step 1 - Run webview (download & deobfuscate → obfuscated.js)
+      - name: Step 1 - Run webcrack-puppeteer (download & deobfuscate → obfuscated.js)
         env:
           PROXY_HOST: ${{ secrets.PROXY_HOST }}
           PROXY_USER: ${{ secrets.PROXY_USER }}
           PROXY_PASS: ${{ secrets.PROXY_PASS }}
-        run: node webview.js
+        run: node webcrack-puppeteer.js
 
-      - name: Step 2 - Run extract (extract result → abc.txt)
-        run: node extract.js
+      - name: Step 2 - Run extract-vrf-key (extract result → abc.txt)
+        run: node extract-vrf-key.js
 
       - name: Show result
         run: cat abc.txt
 
-      - name: Upload abc.txt as artifact
-        uses: actions/upload-artifact@v4
-        with:
-          name: vrf-key-result
-          path: abc.txt
+      - name: Commit and push abc.txt
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add abc.txt
+          git diff --cached --quiet || git commit -m "Update abc.txt with latest VRF key"
+          git push
