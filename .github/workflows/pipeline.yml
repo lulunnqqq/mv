@@ -2,8 +2,6 @@ name: Extract Key V1.3
 
 on:
   workflow_dispatch:
-  schedule:
-    - cron: '*/10 * * * *' 
 
 jobs:
   extract:
