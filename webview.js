@@ -29,7 +29,7 @@ const fs = require('fs');
   const url =
     `https://webcrack.netlify.app/?url=https://vidsrc.cc/saas/js/embed.min.js?t=${timestampInSeconds}`;
   await page.goto(url, { waitUntil: 'networkidle2', timeout: 30000 });
-  console.log('[Step 1] Page opened successfully.');
+  console.log('[Step 1] Page opened successfully.', url);
 
   // === Step 2: Wait 5s for page to finish loading ===
   console.log('[Step 2] Waiting 5 seconds for page to finish loading...');
@@ -57,6 +57,7 @@ const fs = require('fs');
 
   // macOS uses Meta (Cmd+S), Linux uses Control (Ctrl+S)
   const modKey = process.platform === 'darwin' ? 'Meta' : 'Control';
+  console.log(`[Step 5] Using ${modKey}+S for saving...`);
   await page.keyboard.down(modKey);
   await page.keyboard.press('s');
   await page.keyboard.up(modKey);
