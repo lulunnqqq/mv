@@ -6,10 +6,6 @@
   "bugs": {
     "url": "https://github.com/lulunnqqq/mv/issues"
   },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/lulunnqqq/mv.git"
-  },
   "license": "ISC",
   "dependencies": {
     "acorn": "^8.16.0",
