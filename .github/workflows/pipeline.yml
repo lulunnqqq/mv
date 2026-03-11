@@ -1,4 +1,4 @@
-name: Extract Key
+name: Extract Key V1.1
 
 on:
   workflow_dispatch:
