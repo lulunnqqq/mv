@@ -2,8 +2,6 @@ name: Extract Key V1.3
 
 on:
   workflow_dispatch:
-  schedule:
-    - cron: '*/10 * * * *' 
 
 jobs:
   extract:
@@ -52,8 +50,8 @@ jobs:
     if: success() || failure()
     runs-on: ubuntu-latest
     steps:
-      - name: Sleep for 5 minutes
-        run: sleep 300
+      - name: Sleep for 30 minutes
+        run: sleep 1800
 
       - name: Re-trigger workflow
         run: gh workflow run pipeline.yml
