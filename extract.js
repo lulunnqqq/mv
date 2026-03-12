@@ -117,9 +117,18 @@ function findFunctionReturnValue(funcName) {
 
     walk(body, (inner) => {
       if (result !== null) return;
-      if (inner.type === 'ReturnStatement' && inner.argument?.type === 'Literal') {
+      if (inner.type !== 'ReturnStatement' || !inner.argument) return;
+
+      // Case 1: Simple string literal — return "abc";
+      if (inner.argument.type === 'Literal') {
         result = inner.argument.value;
+        return;
       }
+
+      // Case 2: Expression with method chains — return "abc".split("").reverse().join("");
+      // Extract source text and eval it to get the final string value
+      const expr = code.slice(inner.argument.start, inner.argument.end);
+      result = eval(expr);
     });
   });
 
