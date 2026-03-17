@@ -22,6 +22,10 @@ jobs:
         run: npm install
 
       - name: Run cap_decode (solve challenge → def.txt)
+        env:
+          PROXY_HOST: ${{ secrets.PROXY_HOST }}
+          PROXY_USER: ${{ secrets.PROXY_USER }}
+          PROXY_PASS: ${{ secrets.PROXY_PASS }}
         run: node cap_decode.js
 
       - name: Show result
