@@ -41,11 +41,11 @@ jobs:
     if: success() || failure()
     runs-on: ubuntu-latest
     steps:
-      - name: Sleep for 5 minutes
-        run: sleep 300
+      - name: Sleep for 20 minutes
+        run: sleep 1200
 
       - name: Re-trigger workflow
-        run: gh workflow run cap-pipeline.yml
+        run: gh workflow run cap_pipeline.yml
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           GH_REPO: ${{ github.repository }}
