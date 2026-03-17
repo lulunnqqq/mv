@@ -10,6 +10,7 @@
   "dependencies": {
     "acorn": "^8.16.0",
     "puppeteer": "^24.39.0",
+    "undici": "^7.24.4",
     "webcrack": "^2.15.1"
   },
   "author": "",

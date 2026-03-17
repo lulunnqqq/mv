@@ -1,3 +1,12 @@
+const {fetch, ProxyAgent} = require("undici");
+
+
+const proxyhost = process.env.PROXY_HOST;
+const proxyUser = process.env.PROXY_USER;
+const proxyPass = process.env.PROXY_PASS;
+
+const proxyAgent = new ProxyAgent(`https://${proxyUser}:${proxyPass}@${proxyhost}`);
+
 const BASE_URL = "https://cap.hexa.su/0737428d64";
 const HEADERS = {
   Host: "cap.hexa.su",
@@ -135,6 +144,7 @@ async function main() {
   const challengeRes = await fetch(`${BASE_URL}/challenge`, {
     method: "POST",
     headers: HEADERS,
+    dispatcher: proxyAgent, // Use proxy for all requests
   });
   const challengeData = await challengeRes.json();
 
@@ -188,6 +198,7 @@ async function main() {
       "Content-Type": "application/json",
     },
     body: JSON.stringify({ token, solutions }),
+    dispatcher: proxyAgent,
   });
   const redeemData = await redeemRes.json();
 
