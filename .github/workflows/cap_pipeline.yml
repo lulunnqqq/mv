@@ -41,8 +41,8 @@ jobs:
     if: success() || failure()
     runs-on: ubuntu-latest
     steps:
-      - name: Sleep for 20 minutes
-        run: sleep 1200
+      - name: Sleep for 10 minutes
+        run: sleep 600
 
       - name: Re-trigger workflow
         run: gh workflow run cap_pipeline.yml
