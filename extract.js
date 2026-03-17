@@ -93,6 +93,35 @@ function findTargetFuncName(assignmentRight) {
   return result;
 }
 
+// Step 4b: Alternative — extract string literal directly from the 2nd argument
+//   Pattern: await outerFunc(movieId, "someKey" + userId)
+function findKeyStringFromArg(assignmentRight) {
+  let callExpr = assignmentRight;
+
+  if (callExpr?.type === 'AwaitExpression') {
+    callExpr = callExpr.argument;
+  }
+  if (callExpr?.type !== 'CallExpression') return null;
+
+  const secondArg = callExpr.arguments?.[1];
+  if (!secondArg) return null;
+
+  // Direct string literal
+  if (secondArg.type === 'Literal' && typeof secondArg.value === 'string') {
+    return secondArg.value;
+  }
+
+  // String in a BinaryExpression (e.g. "key" + variable) — find the first string literal
+  let result = null;
+  walk(secondArg, (node) => {
+    if (result) return;
+    if (node.type === 'Literal' && typeof node.value === 'string') {
+      result = node.value;
+    }
+  });
+  return result;
+}
+
 // Step 5: Find the function declaration/expression and extract its return value
 function findFunctionReturnValue(funcName) {
   let result = null;
@@ -145,8 +174,14 @@ console.log('Step 2-3 - Found assignment:', !!assignmentRight);
 const targetFuncName = findTargetFuncName(assignmentRight);
 console.log('Step 4 - Target function name:', targetFuncName);
 
-const result = findFunctionReturnValue(targetFuncName);
-console.log('Step 5 - Result:', result);
+let result;
+if (targetFuncName) {
+  result = findFunctionReturnValue(targetFuncName);
+  console.log('Step 5 - Result (from function return):', result);
+} else {
+  result = findKeyStringFromArg(assignmentRight);
+  console.log('Step 4b - Result (key string from argument):', result);
+}
 
 // Write result to abc.txt
 const outputPath = path.join(__dirname, 'abc.txt');
