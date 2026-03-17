@@ -18,6 +18,9 @@ jobs:
         with:
           node-version: '22'
 
+      - name: Install dependencies
+        run: npm install
+
       - name: Run cap_decode (solve challenge → def.txt)
         run: node cap_decode.js
 
